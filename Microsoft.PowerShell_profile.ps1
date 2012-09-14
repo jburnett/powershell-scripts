@@ -37,6 +37,9 @@ if (test-path $gitToolsRoot) {
     $env:path += ";$gitToolsRoot\bin"
     . Add-GitHelpers.ps1
 }
+# Load posh-git example profile
+. 'C:\src\posh-git\profile.example.ps1'
+
 
 # REMOVE: Documents\Scripts is archaic
 # Add USER's scripts dir to path
@@ -63,8 +66,5 @@ if ($null -eq (get-alias pp -ErrorAction SilentlyContinue) ) {
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
 #	05/14/12:	Added support for Pscx (PowerShell Community Extensions)
+#   08/15/12:   Added Git support via posh-git
 #----------------------------------------------------------------------------------------------------
-
-# Load posh-git example profile
-. 'C:\src\posh-git\profile.example.ps1'
-
