@@ -53,6 +53,11 @@ if (test-path "$publicScriptPath\DiskFreeSpace.ps1") {
     set-alias df       DiskFreeSpace.ps1	-ErrorAction SilentlyContinue
 }
 
+# Alias for Notepad++
+if (test-path "${Env:ProgramFiles(x86)}\Notepad++") {
+    set-alias npp       notepad++.exe	-ErrorAction SilentlyContinue
+}
+
 # Define shortcuts for push & pop if they don't exist
 # (Preferably they're defined in profile.ps1 for AllUsersAllHosts
 if ($null -eq (get-alias p -ErrorAction SilentlyContinue) ) {
