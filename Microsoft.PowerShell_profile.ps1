@@ -41,13 +41,6 @@ if (test-path $gitToolsRoot) {
 . 'C:\src\posh-git\profile.example.ps1'
 
 
-# REMOVE: Documents\Scripts is archaic
-# Add USER's scripts dir to path
-$userScriptPath = "$home\Documents\Scripts"
-if (test-path $userScriptPath) {
-    $env:path += ";$userScriptPath"
-}
-
 # Alias for amount of free disk space
 if (test-path "$publicScriptPath\DiskFreeSpace.ps1") {
     set-alias df       DiskFreeSpace.ps1	-ErrorAction SilentlyContinue
@@ -55,6 +48,7 @@ if (test-path "$publicScriptPath\DiskFreeSpace.ps1") {
 
 # Alias for Notepad++
 if (test-path "${Env:ProgramFiles(x86)}\Notepad++") {
+	$env:path += ";${Env:ProgramFiles(x86)}\Notepad++";
     set-alias npp       notepad++.exe	-ErrorAction SilentlyContinue
 }
 
@@ -72,4 +66,6 @@ if ($null -eq (get-alias pp -ErrorAction SilentlyContinue) ) {
 # J's PowerShell profile handler
 #	05/14/12:	Added support for Pscx (PowerShell Community Extensions)
 #   08/15/12:   Added Git support via posh-git
+#	01/14/13:	Add Notepad++ to path if it is installed
+#				Removed path for <user>\Documents\Scripts; replaced by <user>\Documents\WindowsPowershell
 #----------------------------------------------------------------------------------------------------
