@@ -41,6 +41,12 @@ if (test-path $gitToolsRoot) {
 . 'C:\src\posh-git\profile.example.ps1'
 
 
+# .NET Framework (for MSBuild, etc)
+if (test-path "${Env:SYSTEMROOT}\Microsoft.NET\Framework64\v4.0.30319") {
+	$env:path += ";${Env:SYSTEMROOT}\Microsoft.NET\Framework64\v4.0.30319";
+}
+
+
 # Alias for amount of free disk space
 if (test-path "$publicScriptPath\DiskFreeSpace.ps1") {
     set-alias df       DiskFreeSpace.ps1	-ErrorAction SilentlyContinue
@@ -59,6 +65,10 @@ if ($null -eq (get-alias p -ErrorAction SilentlyContinue) ) {
 }
 if ($null -eq (get-alias pp -ErrorAction SilentlyContinue) ) {
 	set-alias pp		popd
+}
+
+if ($null -eq (get-alias ss -ErrorAction SilentlyContinue) ) {
+	set-alias ss		Select-String
 }
 
 
