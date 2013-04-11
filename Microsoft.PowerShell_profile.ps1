@@ -41,9 +41,20 @@ if (test-path $gitToolsRoot) {
 . 'C:\src\posh-git\profile.example.ps1'
 
 
+# Add Visual Studio tools
+$idePath = Get-VSIdePath.ps1
+if (test-path $idePath) {
+	$env:path += ";$idePath";
+}
+
 # .NET Framework (for MSBuild, etc)
 if (test-path "${Env:SYSTEMROOT}\Microsoft.NET\Framework64\v4.0.30319") {
 	$env:path += ";${Env:SYSTEMROOT}\Microsoft.NET\Framework64\v4.0.30319";
+}
+
+# .NET SDK tools
+if (test-path "${Env:ProgramFiles(x86)}\Microsoft SDKs\Windows\v7.0A\Bin\NETFX 4.0 Tools") {
+	$env:path += ";${Env:ProgramFiles(x86)}\Microsoft SDKs\Windows\v7.0A\Bin\NETFX 4.0 Tools";
 }
 
 
@@ -74,8 +85,9 @@ if ($null -eq (get-alias ss -ErrorAction SilentlyContinue) ) {
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
-#	05/14/12:	Added support for Pscx (PowerShell Community Extensions)
-#   08/15/12:   Added Git support via posh-git
+#	04/01/13:	Added .NET SDK tools to path
 #	01/14/13:	Add Notepad++ to path if it is installed
 #				Removed path for <user>\Documents\Scripts; replaced by <user>\Documents\WindowsPowershell
+#   08/15/12:   Added Git support via posh-git
+#	05/14/12:	Added support for Pscx (PowerShell Community Extensions)
 #----------------------------------------------------------------------------------------------------
