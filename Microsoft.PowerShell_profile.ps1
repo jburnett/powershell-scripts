@@ -31,30 +31,42 @@ if (test-path $userScriptPath) {
     $env:path += ";$userScriptPath"
 }
 
-# Add Git tools to path. NOTE: git\cmd should alread be in path
+# Add Git tools to path. NOTE: git\cmd should already be in path
 $gitToolsRoot = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git"
 if (test-path $gitToolsRoot) {
     $env:path += ";$gitToolsRoot\bin"
     . Add-GitHelpers.ps1
 }
 # Load posh-git example profile
-. 'C:\src\posh-git\profile.example.ps1'
+$poshgitDir = (Get-Item "Env:USERPROFILE").Value + "\src\posh-git"
+if (test-path $poshgitDir) {
+	. "$env:USERPROFILE\src\posh-git\profile.example.ps1"
+}
 
 
 # Add Visual Studio tools
 $idePath = Get-VSIdePath.ps1
-if (test-path $idePath) {
+if ($idePath -and (test-path $idePath)) {
 	$env:path += ";$idePath";
+}
+else {
+	"NOTE: Visual Studio was not found"
 }
 
 # .NET Framework (for MSBuild, etc)
-if (test-path "${Env:SYSTEMROOT}\Microsoft.NET\Framework64\v4.0.30319") {
+if (test-path "${Env:SYSTEMROOT}\Microsoft.NET\Framework64\v4.0.30319" -ErrorAction SilentlyContinue) {
 	$env:path += ";${Env:SYSTEMROOT}\Microsoft.NET\Framework64\v4.0.30319";
+}
+else {
+	"NOTE: .NET 4.0 Framework was not found"
 }
 
 # .NET SDK tools
 if (test-path "${Env:ProgramFiles(x86)}\Microsoft SDKs\Windows\v7.0A\Bin\NETFX 4.0 Tools") {
 	$env:path += ";${Env:ProgramFiles(x86)}\Microsoft SDKs\Windows\v7.0A\Bin\NETFX 4.0 Tools";
+}
+else {
+	"NOTE: .NET SDK tools were not found"
 }
 
 
@@ -67,6 +79,9 @@ if (test-path "$publicScriptPath\DiskFreeSpace.ps1") {
 if (test-path "${Env:ProgramFiles(x86)}\Notepad++") {
 	$env:path += ";${Env:ProgramFiles(x86)}\Notepad++";
     set-alias npp       notepad++.exe	-ErrorAction SilentlyContinue
+}
+else {
+	"NOTE: Notepad++ was not found"
 }
 
 # Define shortcuts for push & pop if they don't exist
@@ -85,6 +100,7 @@ if ($null -eq (get-alias ss -ErrorAction SilentlyContinue) ) {
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	05/07/13:	Improve error condition handling; output message for some unavailable items
 #	04/01/13:	Added .NET SDK tools to path
 #	01/14/13:	Add Notepad++ to path if it is installed
 #				Removed path for <user>\Documents\Scripts; replaced by <user>\Documents\WindowsPowershell

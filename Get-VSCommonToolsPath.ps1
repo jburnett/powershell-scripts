@@ -9,7 +9,7 @@ foreach ($evar in $envVarNames ) {
 	}
 }
 
-if (test-path $vsCmnToolsPath) {
+if ($vsCmnToolsPath -and (test-path $vsCmnToolsPath)) {
 	return get-item $vsCmnToolsPath
 }
 else {
