@@ -42,6 +42,13 @@ $poshgitDir = (Get-Item "Env:USERPROFILE").Value + "\src\posh-git"
 if (test-path $poshgitDir) {
 	. "$env:USERPROFILE\src\posh-git\profile.example.ps1"
 }
+else {
+	# Check for posh-git in <systemdrive>:\src
+	$poshgitDir = (Get-Item "Env:SystemDrive").Value + "\src\posh-git"
+	if (test-path $poshgitDir) {
+		. "$env:SystemDrive\src\posh-git\profile.example.ps1"
+	}
+}
 
 
 # Add Visual Studio tools
