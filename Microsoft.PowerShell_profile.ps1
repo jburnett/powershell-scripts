@@ -104,6 +104,13 @@ if ($null -eq (get-alias ss -ErrorAction SilentlyContinue) ) {
 	set-alias ss		Select-String
 }
 
+# Define shortcut for listing dirs only
+# (Preferably they're defined in profile.ps1 for AllUsersAllHosts
+function Get-ChildContainers { gci | ?{$_.PSIsContainer} }		#NOTE: ls -ad works, too
+if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
+	set-alias ld		Get-ChildContainers		# list dirs
+}
+
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
