@@ -7,22 +7,16 @@
 #	See end of file for history
 #----------------------------------------------------------------------------------------------------
 
-# Add shared modules location ahead of user's and Windows
-$publicModulesPath = "$env:PUBLIC\Documents\WindowsPowerShell\Modules"
-if (test-path $publicModulesPath) {
-    $env:PSModulePath = "$publicModulesPath;$env:PSModulePath"
+# Add shared modules location
+$sharedModulesPath = "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
+if (test-path $sharedModulesPath) {
+    $env:PSModulePath = "$sharedModulesPath;$env:PSModulePath"
 }
 
 # Add PowerShell Community Extensions
-$pscxPath = "$env:PUBLIC\Documents\WindowsPowerShell\Modules\Pscx"
-if (test-path "$publicModulesPath\Pscx") {
+$pscxPath = "$env:USERPROFILE\Documents\WindowsPowerShell\Modules\Pscx"
+if (test-path $pscxPath) {
     Import-Module Pscx
-}
-
-# Add PUBLIC scripts to path before user's
-$publicScriptPath = "$env:PUBLIC\Documents\WindowsPowerShell"
-if (test-path $publicScriptPath) {
-    $env:path += ";$publicScriptPath"
 }
 
 # Add USER's scripts dir to path
@@ -38,9 +32,9 @@ if (test-path $gitToolsRoot) {
     . Add-GitHelpers.ps1
 }
 # Load posh-git example profile
-$poshgitDir = (Get-Item "Env:USERPROFILE").Value + "\src\posh-git"
+$poshgitDir = (Get-Item "Env:SystemDrive").Value + "\src\posh-git"
 if (test-path $poshgitDir) {
-	. "$env:USERPROFILE\src\posh-git\profile.example.ps1"
+	. "$env:SystemDrive\src\posh-git\profile.example.ps1"
 }
 else {
 	# Check for posh-git in <systemdrive>:\src
@@ -114,6 +108,8 @@ if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	09/22/13:	Changed approach to have each user's profile point to c:\src\powershell-scripts (
+#				rather than try to redir through env:PUBLIC\Documents...)
 #	05/07/13:	Improve error condition handling; output message for some unavailable items
 #	04/01/13:	Added .NET SDK tools to path
 #	01/14/13:	Add Notepad++ to path if it is installed
