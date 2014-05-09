@@ -21,6 +21,7 @@ if (test-path $pscxPath) {
 else {
 	"NOTE: PowerShell Community Extension (Pscx) 3.x was not found"
 }
+
 ### Add USER's scripts dir to path
 $userScriptPath = "$env:USERPROFILE\Documents\WindowsPowerShell"
 if (test-path $userScriptPath) {
