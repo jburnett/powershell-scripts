@@ -14,11 +14,13 @@ if (test-path $sharedModulesPath) {
 }
 
 ### Add PowerShell Community Extensions
-$pscxPath = "$env:USERPROFILE\Documents\WindowsPowerShell\Modules\Pscx"
+$pscxPath = "${Env:\ProgramFiles(x86)}\PowerShell Community Extensions\Pscx3\Pscx"
 if (test-path $pscxPath) {
     Import-Module Pscx
 }
-
+else {
+	"NOTE: PowerShell Community Extension (Pscx) 3.x was not found"
+}
 ### Add USER's scripts dir to path
 $userScriptPath = "$env:USERPROFILE\Documents\WindowsPowerShell"
 if (test-path $userScriptPath) {
