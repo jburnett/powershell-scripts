@@ -7,6 +7,24 @@
 #	See end of file for history
 #----------------------------------------------------------------------------------------------------
 
+function Is-NetworkMappedDrive($path) {
+	#TODO: detect if path is on net mapped drive
+	# maybe use Win32_LogicalDisk where DriveType is 4?
+	return $true
+}
+
+
+### If HOME is config'd to a network drive, set to local
+# TODO: this doesn't seem to work on ASI network; restricted by policy?
+# if (Is-NetworkMappedDrive($HOME)) {
+	# Set-Variable HOMEDRIVE 'C:\' -Force
+	# Set-Variable HOMEPATH "Users\$Env:UserName" -Force
+	# Write-Host "Setting HOME to $HOMEDRIVE$HOMEPATH"
+	# Set-Variable HOME "$HOMEDRIVE$HOMEPATH" -Force
+	##Also set ~
+	# (Get-PSProvider 'FileSystem').Home = "$HOMEDRIVE$HOMEPATH"
+# }
+
 ### Add shared modules location
 $sharedModulesPath = "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
 if (test-path $sharedModulesPath) {
