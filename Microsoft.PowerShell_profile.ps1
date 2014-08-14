@@ -52,16 +52,20 @@ if (test-path $gitToolsRoot) {
     $env:path += ";$gitToolsRoot\bin"
     . Add-GitHelpers.ps1
 }
-# Load posh-git example profile
-$poshgitDir = (Get-Item "Env:SystemDrive").Value + "\src\posh-git"
+# Load posh-git profile.  Check Tools dir first (where BoxStarter installs it)
+$poshgitDir = (Get-Item "Env:SystemDrive").Value + "\tools\poshgit"
 if (test-path $poshgitDir) {
-	. "$env:SystemDrive\src\posh-git\profile.example.ps1"
+	$poshgitScript = get-childitem $poshgitDir "profile.example.ps1" -recurse
+	if ($poshgitScript ) {
+		. $poshgitScript.FullName
+	}
 }
 else {
-	# Check for posh-git in <systemdrive>:\src
+	# TODO: remove this section someday
+	# Check for posh-git in the old loaction, <systemdrive>:\src
 	$poshgitDir = (Get-Item "Env:SystemDrive").Value + "\src\posh-git"
 	if (test-path $poshgitDir) {
-		. "$env:SystemDrive\src\posh-git\profile.example.ps1"
+		. "$poshgitDir\profile.example.ps1"
 	}
 }
 
@@ -159,6 +163,7 @@ if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	08/14/2014	Adapted to look for PoshGit where BoxStarter/Chocolatey installs it.
 #	11/18/2013	Improved algo for including most recent .NET Fx and .NET Fx Tools in path
 #	09/22/13:	Changed approach to have each user's profile point to c:\src\powershell-scripts (
 #				rather than try to redir through env:PUBLIC\Documents...)
