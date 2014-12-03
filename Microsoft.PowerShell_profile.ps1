@@ -26,15 +26,16 @@ function Is-NetworkMappedDrive($path) {
 # }
 
 ### Add shared modules location
-$sharedModulesPath = "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
-if (test-path $sharedModulesPath) {
-    $env:PSModulePath = "$sharedModulesPath;$env:PSModulePath"
-}
+# 09/05/2014: removed b/c not using WindowsPowerShell\Modules anymore
+#$sharedModulesPath = "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
+#if (test-path $sharedModulesPath) {
+#    $env:PSModulePath = "$sharedModulesPath;$env:PSModulePath"
+#}
 
 ### Add PowerShell Community Extensions
 $pscxPath = "${Env:\ProgramFiles(x86)}\PowerShell Community Extensions\Pscx3\Pscx"
 if (test-path $pscxPath) {
-    Import-Module Pscx
+    Import-Module $pscxPath\Pscx
 }
 else {
 	"NOTE: PowerShell Community Extension (Pscx) 3.x was not found"
@@ -78,6 +79,19 @@ if ($idePath -and (test-path $idePath)) {
 else {
 	"NOTE: Visual Studio was not found"
 }
+
+
+### Add Beyond Compare tools
+$bc3ToolsRoot = (Get-Item "Env:ProgramFiles(x86)").Value + "\Beyond Compare 3"
+if (test-path $bc3ToolsRoot) {
+    $env:path += ";$bc3ToolsRoot"
+    # Reset diff alias to use BC3
+	Set-Alias diff 'C:\Program Files (x86)\Beyond Compare 3\BComp.exe' -Force -Option AllScope
+}
+else {
+	"NOTE: Beyond Compare 3 was not found"
+}
+
 
 ### .NET Framework (for MSBuild, etc)
 # Look for 64-bit first
@@ -163,6 +177,8 @@ if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	09/05/2014	Use Beyond Compare 3 for diff; Fixed Pscx import problem; 
+#				Removed use of shared modules location (archaic)
 #	08/14/2014	Adapted to look for PoshGit where BoxStarter/Chocolatey installs it.
 #	11/18/2013	Improved algo for including most recent .NET Fx and .NET Fx Tools in path
 #	09/22/13:	Changed approach to have each user's profile point to c:\src\powershell-scripts (
