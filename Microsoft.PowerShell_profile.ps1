@@ -38,8 +38,20 @@ if (test-path $pscxPath) {
     Import-Module $pscxPath\Pscx
 }
 else {
-	"NOTE: PowerShell Community Extension (Pscx) 3.x was not found"
+	Write-Warning "PowerShell Community Extension (Pscx) 3.x was not found"
 }
+
+### Add TFS SnapIn
+$snapinName = 'Microsoft.TeamFoundation.PowerShell'
+if ( (Get-PSSnapIn $snapinName -ErrorAction SilentlyContinue) -eq $null ) {
+	# Try to add it
+	Add-PSSnapIn $snapinName -ErrorAction SilentlyContinue
+	# Was it successfully added?
+	if ( (Get-PSSnapIn $snapinName -ErrorAction SilentlyContinue) -eq $null ) {
+		Write-Warning "Failed to include SnapIn '$snapinName'.  Is it installed?"
+	}
+}
+
 
 ### Add USER's scripts dir to path
 $userScriptPath = "$env:USERPROFILE\Documents\WindowsPowerShell"
@@ -77,7 +89,7 @@ if ($idePath -and (test-path $idePath)) {
 	$env:path += ";$idePath";
 }
 else {
-	"NOTE: Visual Studio was not found"
+	Write-Warning "Visual Studio was not found"
 }
 
 
@@ -115,7 +127,7 @@ if (0 -lt $newestFxPath.Length) {
 	$env:path += [string]::format(';{0}', $newestFxPath)
 }
 else {
-	"NOTE: .NET Framework was not found"
+	Write-Warning ".NET Framework was not found"
 }
 
 
@@ -132,7 +144,7 @@ if (test-path $MSWinSdksPath) {
 		$env:path += [string]::format(';{0}', $NetFxToolsPath.FullName)
 	}
 	else {
-		"NOTE: .NET SDK tools were not found"
+		Write-Warning ".NET SDK tools were not found"
 	}
 }
 else {
@@ -141,7 +153,7 @@ else {
 
 
 ### Alias for amount of free disk space
-if (test-path "$publicScriptPath\DiskFreeSpace.ps1") {
+if (test-path "$userScriptPath\DiskFreeSpace.ps1") {
     set-alias df       DiskFreeSpace.ps1	-ErrorAction SilentlyContinue
 }
 
@@ -177,6 +189,8 @@ if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	12/04/2014	Include TFS Snapin; Fixed path for setting df alias; convert several messages
+#				to use Write-Warning
 #	09/05/2014	Use Beyond Compare 3 for diff; Fixed Pscx import problem; 
 #				Removed use of shared modules location (archaic)
 #	08/14/2014	Adapted to look for PoshGit where BoxStarter/Chocolatey installs it.
