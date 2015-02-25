@@ -105,6 +105,16 @@ else {
 }
 
 
+### Add Sublime Text editor
+$sublime3Bin = (Get-Item "Env:ProgramFiles").Value + "\Sublime Text 3"
+if (test-path $sublime3Bin) {
+    $env:path += ";$sublime3Bin"
+}
+else {
+    "NOTE: Sublime Text 3 was not found"
+}
+
+
 ### .NET Framework (for MSBuild, etc)
 # Look for 64-bit first
 $fxRoot = "${Env:SYSTEMROOT}\Microsoft.NET\Framework64\"
