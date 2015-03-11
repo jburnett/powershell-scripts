@@ -1,5 +1,5 @@
 # Loop thru prioritized list of VS Common Tools env var names; return the path value of the first env var found
-$envVarNames = @('VS120COMNTOOLS', 'VS110COMNTOOLS', 'VS100COMNTOOLS')
+$envVarNames = @('VS140COMNTOOLS', 'VS130COMNTOOLS', 'VS120COMNTOOLS', 'VS110COMNTOOLS', 'VS100COMNTOOLS')
 $vsCmnToolsPath = ''
 
 foreach ($evar in $envVarNames ) {
