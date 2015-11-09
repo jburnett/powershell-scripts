@@ -6,14 +6,11 @@
 #
 #	See end of file for history
 #----------------------------------------------------------------------------------------------------
-
 function Is-NetworkMappedDrive($path) {
 	#TODO: detect if path is on net mapped drive
 	# maybe use Win32_LogicalDisk where DriveType is 4?
 	return $true
 }
-
-
 ### If HOME is config'd to a network drive, set to local
 # TODO: this doesn't seem to work on ASI network; restricted by policy?
 # if (Is-NetworkMappedDrive($HOME)) {
@@ -24,14 +21,12 @@ function Is-NetworkMappedDrive($path) {
 	##Also set ~
 	# (Get-PSProvider 'FileSystem').Home = "$HOMEDRIVE$HOMEPATH"
 # }
-
 ### Add shared modules location
 # 09/05/2014: removed b/c not using WindowsPowerShell\Modules anymore
 #$sharedModulesPath = "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
 #if (test-path $sharedModulesPath) {
 #    $env:PSModulePath = "$sharedModulesPath;$env:PSModulePath"
 #}
-
 ### Add PowerShell Community Extensions
 $pscxPath = "${Env:\ProgramFiles(x86)}\PowerShell Community Extensions\Pscx3\Pscx"
 if (test-path $pscxPath) {
@@ -40,7 +35,6 @@ if (test-path $pscxPath) {
 else {
 	Write-Warning "PowerShell Community Extension (Pscx) 3.x was not found"
 }
-
 ### Add TFS SnapIn
 $snapinName = 'Microsoft.TeamFoundation.PowerShell'
 if ( (Get-PSSnapIn $snapinName -ErrorAction SilentlyContinue) -eq $null ) {
@@ -51,14 +45,11 @@ if ( (Get-PSSnapIn $snapinName -ErrorAction SilentlyContinue) -eq $null ) {
 		Write-Warning "Failed to include SnapIn '$snapinName'.  Is it installed?"
 	}
 }
-
-
 ### Add USER's scripts dir to path
 $userScriptPath = "$env:USERPROFILE\Documents\WindowsPowerShell"
 if (test-path $userScriptPath) {
     $env:path += ";$userScriptPath"
 }
-
 ### Add Git tools to path. NOTE: git\cmd should already be in path
 $gitToolsRoot = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git"
 if (test-path $gitToolsRoot) {
@@ -81,8 +72,6 @@ else {
 		. "$poshgitDir\profile.example.ps1"
 	}
 }
-
-
 ### Add Visual Studio tools
 $idePath = Get-VSIdePath.ps1
 if ($idePath -and (test-path $idePath)) {
@@ -91,8 +80,6 @@ if ($idePath -and (test-path $idePath)) {
 else {
 	Write-Warning "Visual Studio was not found"
 }
-
-
 ### Add Beyond Compare tools
 $bc3ToolsRoot = (Get-Item "Env:ProgramFiles(x86)").Value + "\Beyond Compare 3"
 if (test-path $bc3ToolsRoot) {
@@ -103,8 +90,6 @@ if (test-path $bc3ToolsRoot) {
 else {
 	"NOTE: Beyond Compare 3 was not found"
 }
-
-
 ### Add Sublime Text editor
 $sublime3Bin = (Get-Item "Env:ProgramFiles").Value + "\Sublime Text 3"
 if (test-path $sublime3Bin) {
@@ -113,8 +98,6 @@ if (test-path $sublime3Bin) {
 else {
     "NOTE: Sublime Text 3 was not found"
 }
-
-
 ### .NET Framework (for MSBuild, etc)
 # Look for 64-bit first
 $fxRoot = "${Env:SYSTEMROOT}\Microsoft.NET\Framework64\"
@@ -124,7 +107,6 @@ if ($false -eq (test-path $fxRoot -ErrorAction SilentlyContinue)) {
 		$fxRoot = ""
 	}
 }
-
 ### Find most recent version of .NET Fx
 $newestFxPath = ""
 gci $fxRoot v?.* | ?{ $_.PSIsContainer } | %{
@@ -139,8 +121,6 @@ if (0 -lt $newestFxPath.Length) {
 else {
 	Write-Warning ".NET Framework was not found"
 }
-
-
 ### .NET SDK tools
 $MSWinSdksPath = "${Env:ProgramFiles(x86)}\Microsoft SDKs\Windows"
 if (test-path $MSWinSdksPath) {
@@ -148,7 +128,6 @@ if (test-path $MSWinSdksPath) {
 	gci $MSWinSdksPath 'NETFX 4.0 Tools' -recurse | %{
 		$NetFxToolsPath = $_
 	}
-
 	if ($NetFxToolsPath.PSIsContainer) {
 		[string]::format('Found .NET SDK Tools; Adding [{0}] to path...', $NetFxToolsPath.FullName)
 		$env:path += [string]::format(';{0}', $NetFxToolsPath.FullName)
@@ -160,13 +139,10 @@ if (test-path $MSWinSdksPath) {
 else {
 	"NOTE: Path to Microsoft Windows SDKs was not found"
 }
-
-
 ### Alias for amount of free disk space
 if (test-path "$userScriptPath\DiskFreeSpace.ps1") {
     set-alias df       DiskFreeSpace.ps1	-ErrorAction SilentlyContinue
 }
-
 ### Alias for Notepad++
 if (test-path "${Env:ProgramFiles(x86)}\Notepad++") {
 	$env:path += ";${Env:ProgramFiles(x86)}\Notepad++";
@@ -175,7 +151,6 @@ if (test-path "${Env:ProgramFiles(x86)}\Notepad++") {
 else {
 	"NOTE: Notepad++ was not found"
 }
-
 ### Define shortcuts for push & pop if they don't exist
 # (Preferably they're defined in profile.ps1 for AllUsersAllHosts
 if ($null -eq (get-alias p -ErrorAction SilentlyContinue) ) {
@@ -184,19 +159,15 @@ if ($null -eq (get-alias p -ErrorAction SilentlyContinue) ) {
 if ($null -eq (get-alias pp -ErrorAction SilentlyContinue) ) {
 	set-alias pp		popd
 }
-
 if ($null -eq (get-alias ss -ErrorAction SilentlyContinue) ) {
 	set-alias ss		Select-String
 }
-
 ### Define shortcut for listing dirs only
 # (Preferably they're defined in profile.ps1 for AllUsersAllHosts
 function Get-ChildContainers { gci | ?{$_.PSIsContainer} }		#NOTE: ls -ad works, too
 if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 	set-alias ld		Get-ChildContainers		# list dirs
 }
-
-
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
 #	12/04/2014	Include TFS Snapin; Fixed path for setting df alias; convert several messages
@@ -214,3 +185,10 @@ if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 #   08/15/12:   Added Git support via posh-git
 #	05/14/12:	Added support for Pscx (PowerShell Community Extensions)
 #----------------------------------------------------------------------------------------------------
+if(Test-Path Function:\Prompt) {Rename-Item Function:\Prompt PrePoshGitPrompt -Force}
+
+# Load posh-git example profile
+. 'C:\tools\poshgit\dahlbyk-posh-git-fadc4dd\profile.example.ps1'
+
+Rename-Item Function:\Prompt PoshGitPrompt -Force
+function Prompt() {if(Test-Path Function:\PrePoshGitPrompt){++$global:poshScope; New-Item function:\script:Write-host -value "param([object] `$object, `$backgroundColor, `$foregroundColor, [switch] `$nonewline) " -Force | Out-Null;$private:p = PrePoshGitPrompt; if(--$global:poshScope -eq 0) {Remove-Item function:\Write-Host -Force}}PoshGitPrompt}
