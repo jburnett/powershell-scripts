@@ -111,8 +111,7 @@ Write-Host 'Adding SysInternals to the path'
 Add-Path 'C:\tools\SysInternals'
 Write-Host
 
-# cinst DotNet4.0
-cinst DotNet4.5.1
+cinst DotNet4.5.2
 
 cinst GoogleChrome-AllUsers
 cinst fiddler4
