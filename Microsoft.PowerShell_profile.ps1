@@ -115,6 +115,16 @@ else {
 }
 
 
+### Add VS Code editor
+$vscodeBin = (Get-Item "Env:ProgramFiles(x86)").Value + "\Microsoft VS Code"
+if (test-path $vscodeBin) {
+    $env:path += ";$vscodeBin"
+}
+else {
+    "NOTE: VS Code was not found"
+}
+
+
 ### .NET Framework (for MSBuild, etc)
 # Look for 64-bit first
 $fxRoot = "${Env:SYSTEMROOT}\Microsoft.NET\Framework64\"
@@ -167,14 +177,6 @@ if (test-path "$userScriptPath\DiskFreeSpace.ps1") {
     set-alias df       DiskFreeSpace.ps1	-ErrorAction SilentlyContinue
 }
 
-### Alias for Notepad++
-if (test-path "${Env:ProgramFiles(x86)}\Notepad++") {
-	$env:path += ";${Env:ProgramFiles(x86)}\Notepad++";
-    set-alias npp       notepad++.exe	-ErrorAction SilentlyContinue
-}
-else {
-	"NOTE: Notepad++ was not found"
-}
 
 ### Define shortcuts for push & pop if they don't exist
 # (Preferably they're defined in profile.ps1 for AllUsersAllHosts
@@ -183,10 +185,6 @@ if ($null -eq (get-alias p -ErrorAction SilentlyContinue) ) {
 }
 if ($null -eq (get-alias pp -ErrorAction SilentlyContinue) ) {
 	set-alias pp		popd
-}
-
-if ($null -eq (get-alias ss -ErrorAction SilentlyContinue) ) {
-	set-alias ss		Select-String
 }
 
 ### Define shortcut for listing dirs only
@@ -199,6 +197,7 @@ if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#   04/05/2016  Added VS Code to path; removed Notepad++; removed ss in lieu of sls
 #	12/04/2014	Include TFS Snapin; Fixed path for setting df alias; convert several messages
 #				to use Write-Warning
 #	09/05/2014	Use Beyond Compare 3 for diff; Fixed Pscx import problem; 
