@@ -124,6 +124,15 @@ else {
     "NOTE: VS Code was not found"
 }
 
+### Add GraphViz if it's installed
+$graphViz = (Get-Item "Env:ProgramFiles(x86)").Value + "\GraphViz2.38"
+if (test-path $graphViz) {
+    $env:path += ";$graphViz\bin"
+}
+else {
+    "NOTE: GraphViz was not found"
+}
+
 
 ### .NET Framework (for MSBuild, etc)
 # Look for 64-bit first
@@ -172,6 +181,13 @@ else {
 }
 
 
+# Chocolatey profile
+$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+if (Test-Path($ChocolateyProfile)) {
+  Import-Module "$ChocolateyProfile"
+}
+
+
 ### Alias for amount of free disk space
 if (test-path "$userScriptPath\DiskFreeSpace.ps1") {
     set-alias df       DiskFreeSpace.ps1	-ErrorAction SilentlyContinue
@@ -197,6 +213,7 @@ if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	08/26/2016	Added Chocolatey, GraphViz support
 #   04/05/2016  Added VS Code to path; removed Notepad++; removed ss in lieu of sls
 #	12/04/2014	Include TFS Snapin; Fixed path for setting df alias; convert several messages
 #				to use Write-Warning
@@ -213,3 +230,4 @@ if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 #   08/15/12:   Added Git support via posh-git
 #	05/14/12:	Added support for Pscx (PowerShell Community Extensions)
 #----------------------------------------------------------------------------------------------------
+
