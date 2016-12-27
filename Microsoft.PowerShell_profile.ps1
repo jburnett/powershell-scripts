@@ -65,22 +65,15 @@ if (test-path $gitToolsRoot) {
     $env:path += ";$gitToolsRoot\bin"
     . Add-GitHelpers.ps1
 }
-# Load posh-git profile.  Check Tools dir first (where BoxStarter installs it)
-$poshgitDir = (Get-Item "Env:SystemDrive").Value + "\tools\poshgit"
-if (test-path $poshgitDir) {
-	$poshgitScript = get-childitem $poshgitDir "profile.example.ps1" -recurse
-	if ($poshgitScript ) {
-		. $poshgitScript.FullName
-	}
-}
-else {
-	# TODO: remove this section someday
-	# Check for posh-git in the old loaction, <systemdrive>:\src
-	$poshgitDir = (Get-Item "Env:SystemDrive").Value + "\src\posh-git"
-	if (test-path $poshgitDir) {
-		. "$poshgitDir\profile.example.ps1"
-	}
-}
+
+# Load posh-git profile.
+if(Test-Path Function:\Prompt) {Rename-Item Function:\Prompt PrePoshGitPrompt -Force}
+
+# Load posh-git example profile
+. 'C:\tools\poshgit\dahlbyk-posh-git-2b9342c\profile.example.ps1'
+
+Rename-Item Function:\Prompt PoshGitPrompt -Force
+function Prompt() {if(Test-Path Function:\PrePoshGitPrompt){++$global:poshScope; New-Item function:\script:Write-host -value "param([object] `$object, `$backgroundColor, `$foregroundColor, [switch] `$nonewline) " -Force | Out-Null;$private:p = PrePoshGitPrompt; if(--$global:poshScope -eq 0) {Remove-Item function:\Write-Host -Force}}PoshGitPrompt}
 
 
 ### Add Visual Studio tools
