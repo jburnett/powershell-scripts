@@ -7,14 +7,6 @@
 #	See end of file for history
 #----------------------------------------------------------------------------------------------------
 
-### Add PowerShell Community Extensions
-$pscxPath = "${Env:\ProgramFiles(x86)}\PowerShell Community Extensions\Pscx3\Pscx"
-if (test-path $pscxPath) {
-    Import-Module $pscxPath\Pscx
-}
-else {
-	Write-Warning "PowerShell Community Extension (Pscx) 3.x was not found"
-}
 ### Add TFS SnapIn
 $snapinName = 'Microsoft.TeamFoundation.PowerShell'
 if ( (Get-PSSnapIn $snapinName -ErrorAction SilentlyContinue) -eq $null ) {
