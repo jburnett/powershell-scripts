@@ -7,16 +7,6 @@
 #	See end of file for history
 #----------------------------------------------------------------------------------------------------
 
-### Add TFS SnapIn
-$snapinName = 'Microsoft.TeamFoundation.PowerShell'
-if ( (Get-PSSnapIn $snapinName -ErrorAction SilentlyContinue) -eq $null ) {
-	# Try to add it
-	Add-PSSnapIn $snapinName -ErrorAction SilentlyContinue
-	# Was it successfully added?
-	if ( (Get-PSSnapIn $snapinName -ErrorAction SilentlyContinue) -eq $null ) {
-		Write-Warning "Failed to include SnapIn '$snapinName'.  Is it installed?"
-	}
-}
 ### Add USER's scripts dir to path
 $userScriptPath = "$env:USERPROFILE\Documents\WindowsPowerShell"
 if (test-path $userScriptPath) {
