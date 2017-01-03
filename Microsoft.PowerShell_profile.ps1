@@ -54,14 +54,7 @@ if (test-path $bc3ToolsRoot) {
 else {
 	"NOTE: Beyond Compare 3 was not found"
 }
-### Add Sublime Text editor
-$sublime3Bin = (Get-Item "Env:ProgramFiles").Value + "\Sublime Text 3"
-if (test-path $sublime3Bin) {
-    $env:path += ";$sublime3Bin"
-}
-else {
-    "NOTE: Sublime Text 3 was not found"
-}
+
 ### Add VS Code editor
 $vscodeBin = (Get-Item "Env:ProgramFiles(x86)").Value + "\Microsoft VS Code"
 if (test-path $vscodeBin) {
