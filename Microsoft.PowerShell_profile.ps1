@@ -18,14 +18,14 @@ if (test-path $gitToolsRoot) {
     $env:path += ";$gitToolsRoot\bin"
     . Add-GitHelpers.ps1
 }
-# Load posh-git profile.
-#Set-Item Function:\Prompt PrePoshGitPrompt
+
+### Load posh-git profile.
 if(Test-Path Function:\Prompt) {Rename-Item Function:\Prompt PrePoshGitPrompt -Force}
-#else { Set-Item Function:\Prompt PrePoshGitPrompt }
-# Load posh-git example profile
+# Load posh-git example profile (defines global prompt function)
 . 'C:\tools\poshgit\dahlbyk-posh-git-e8dd9f2\profile.example.ps1'
 Rename-Item Function:\Prompt PoshGitPrompt -Force
 function Prompt() {if(Test-Path Function:\PrePoshGitPrompt){++$global:poshScope; New-Item function:\script:Write-host -value "param([object] `$object, `$backgroundColor, `$foregroundColor, [switch] `$nonewline) " -Force | Out-Null;$private:p = PrePoshGitPrompt; if(--$global:poshScope -eq 0) {Remove-Item function:\Write-Host -Force}}PoshGitPrompt}
+
 ### Add Visual Studio tools
 $idePath = Get-VSIdePath.ps1
 if ($idePath -and (test-path $idePath)) {
@@ -34,6 +34,7 @@ if ($idePath -and (test-path $idePath)) {
 else {
 	Write-Warning "Visual Studio was not found"
 }
+
 ### Add Beyond Compare tools
 $bc3ToolsRoot = (Get-Item "Env:ProgramFiles(x86)").Value + "\Beyond Compare 3"
 if (test-path $bc3ToolsRoot) {
@@ -53,6 +54,7 @@ if (test-path $vscodeBin) {
 else {
     "NOTE: VS Code was not found"
 }
+
 ### Add GraphViz if it's installed
 $graphViz = (Get-Item "Env:ProgramFiles(x86)").Value + "\GraphViz2.38"
 if (test-path $graphViz) {
@@ -61,6 +63,8 @@ if (test-path $graphViz) {
 else {
     "NOTE: GraphViz was not found"
 }
+
+
 ### .NET Framework (for MSBuild, etc)
 # Look for 64-bit first
 $fxRoot = "${Env:SYSTEMROOT}\Microsoft.NET\Framework64\"
@@ -84,30 +88,16 @@ if (0 -lt $newestFxPath.Length) {
 else {
 	Write-Warning ".NET Framework was not found"
 }
-### .NET SDK tools
-$MSWinSdksPath = "${Env:ProgramFiles(x86)}\Microsoft SDKs\Windows"
-if (test-path $MSWinSdksPath) {
-	# Seems that MS installers ensure only one path has these tools
-	gci $MSWinSdksPath 'NETFX 4.0 Tools' -recurse | %{
-		$NetFxToolsPath = $_
-	}
-	if ($NetFxToolsPath.PSIsContainer) {
-		[string]::format('Found .NET SDK Tools; Adding [{0}] to path...', $NetFxToolsPath.FullName)
-		$env:path += [string]::format(';{0}', $NetFxToolsPath.FullName)
-	}
-	else {
-		Write-Warning ".NET SDK tools were not found"
-	}
-}
-else {
-	"NOTE: Path to Microsoft Windows SDKs was not found"
-}
-# Chocolatey profile
+
+
+### Chocolatey profile
 $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 if (Test-Path($ChocolateyProfile)) {
   Import-Module "$ChocolateyProfile"
 }
-### Alias for amount of free disk space
+
+### Define aliases & shortcuts
+# Alias for amount of free disk space
 if (test-path "$userScriptPath\DiskFreeSpace.ps1") {
     set-alias df       DiskFreeSpace.ps1	-ErrorAction SilentlyContinue
 }
@@ -119,14 +109,17 @@ if ($null -eq (get-alias p -ErrorAction SilentlyContinue) ) {
 if ($null -eq (get-alias pp -ErrorAction SilentlyContinue) ) {
 	set-alias pp		popd
 }
-### Define shortcut for listing dirs only
-# (Preferably they're defined in profile.ps1 for AllUsersAllHosts
+# Define shortcut for listing dirs only
 function Get-ChildContainers { gci | ?{$_.PSIsContainer} }		#NOTE: ls -ad works, too
 if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 	set-alias ld		Get-ChildContainers		# list dirs
 }
+
+
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	01/03/2017	Cleanup; removed unused functions & config settings: Is-NetworkMappedDrive, Sublime,
+#				TFS PowerShell snapin, PowerShell Community Extensions, .NET SDK Tools
 #	08/26/2016	Added Chocolatey, GraphViz support
 #   04/05/2016  Added VS Code to path; removed Notepad++; removed ss in lieu of sls
 #	12/04/2014	Include TFS Snapin; Fixed path for setting df alias; convert several messages
