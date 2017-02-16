@@ -115,9 +115,11 @@ if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 	set-alias ld		Get-ChildContainers		# list dirs
 }
 
+function touch {set-content -Path ($args[0]) -Value ($null)} 
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	02/15/2017	Added touch fn
 #	01/03/2017	Cleanup; removed unused functions & config settings: Is-NetworkMappedDrive, Sublime,
 #				TFS PowerShell snapin, PowerShell Community Extensions, .NET SDK Tools
 #	08/26/2016	Added Chocolatey, GraphViz support
