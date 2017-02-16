@@ -22,7 +22,7 @@ if (test-path $gitToolsRoot) {
 ### Load posh-git profile.
 if(Test-Path Function:\Prompt) {Rename-Item Function:\Prompt PrePoshGitPrompt -Force}
 # Load posh-git example profile (defines global prompt function)
-. 'C:\tools\poshgit\dahlbyk-posh-git-fba883f\profile.example.ps1'
+. 'C:\tools\poshgit\dahlbyk-posh-git-7d93c81\profile.example.ps1'
 Rename-Item Function:\Prompt PoshGitPrompt -Force
 function Prompt() {if(Test-Path Function:\PrePoshGitPrompt){++$global:poshScope; New-Item function:\script:Write-host -value "param([object] `$object, `$backgroundColor, `$foregroundColor, [switch] `$nonewline) " -Force | Out-Null;$private:p = PrePoshGitPrompt; if(--$global:poshScope -eq 0) {Remove-Item function:\Write-Host -Force}}PoshGitPrompt}
 
@@ -119,6 +119,7 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	02/16/2017	Updated PoshGit path for changed commit number
 #	02/15/2017	Added touch fn
 #	01/03/2017	Cleanup; removed unused functions & config settings: Is-NetworkMappedDrive, Sublime,
 #				TFS PowerShell snapin, PowerShell Community Extensions, .NET SDK Tools
