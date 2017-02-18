@@ -20,11 +20,8 @@ if (test-path $gitToolsRoot) {
 }
 
 ### Load posh-git profile.
-if(Test-Path Function:\Prompt) {Rename-Item Function:\Prompt PrePoshGitPrompt -Force}
 # Load posh-git example profile (defines global prompt function)
-. 'C:\tools\poshgit\dahlbyk-posh-git-fba883f\profile.example.ps1'
-Rename-Item Function:\Prompt PoshGitPrompt -Force
-function Prompt() {if(Test-Path Function:\PrePoshGitPrompt){++$global:poshScope; New-Item function:\script:Write-host -value "param([object] `$object, `$backgroundColor, `$foregroundColor, [switch] `$nonewline) " -Force | Out-Null;$private:p = PrePoshGitPrompt; if(--$global:poshScope -eq 0) {Remove-Item function:\Write-Host -Force}}PoshGitPrompt}
+. 'C:\tools\poshgit\dahlbyk-posh-git-7d93c81\profile.example.ps1'
 
 ### Add Visual Studio tools
 $idePath = Get-VSIdePath.ps1
@@ -44,10 +41,23 @@ if (test-path $bc3ToolsRoot) {
 }
 else {
 	"NOTE: Beyond Compare 3 was not found"
+
+	#TODO: consider replacing Beyond Compare with Meld
+
+	$meldToolsRoot = (Get-Item "Env:ProgramFiles(x86)").Value + "\Meld"
+	if (test-path $meldToolsRoot) {
+		$env:path += ";$meldToolsRoot"
+		# Reset diff alias to use Meld
+		Set-Alias diff 'C:\Program Files (x86)\Meld\meld.exe' -Force -Option AllScope
+	}
+	else {
+		"NOTE: Meld was not found"
+	}
 }
 
 ### Add VS Code editor
-$vscodeBin = (Get-Item "Env:ProgramFiles(x86)").Value + "\Microsoft VS Code"
+# NOTE: important to use bin dir to pick up code.cmd
+$vscodeBin = (Get-Item "Env:ProgramFiles(x86)").Value + "\Microsoft VS Code\bin"
 if (test-path $vscodeBin) {
     $env:path += ";$vscodeBin"
 }
@@ -118,6 +128,7 @@ if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	02/18/2017	Use Meld for diffs when Beyond Compare not found
 #	01/03/2017	Cleanup; removed unused functions & config settings: Is-NetworkMappedDrive, Sublime,
 #				TFS PowerShell snapin, PowerShell Community Extensions, .NET SDK Tools
 #	08/26/2016	Added Chocolatey, GraphViz support
