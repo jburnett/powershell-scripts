@@ -22,11 +22,9 @@ if (test-path $gitToolsRoot) {
 ### Load posh-git profile.
 # Load posh-git example profile (defines global prompt function)
 . 'C:\tools\poshgit\dahlbyk-posh-git-7d93c81\profile.example.ps1'
-<<<<<<< HEAD
-=======
+
 Rename-Item Function:\Prompt PoshGitPrompt -Force
 function Prompt() {if(Test-Path Function:\PrePoshGitPrompt){++$global:poshScope; New-Item function:\script:Write-host -value "param([object] `$object, `$backgroundColor, `$foregroundColor, [switch] `$nonewline) " -Force | Out-Null;$private:p = PrePoshGitPrompt; if(--$global:poshScope -eq 0) {Remove-Item function:\Write-Host -Force}}PoshGitPrompt}
->>>>>>> 918e6dbe113fe1e11a8c65b08e8b8e29ab79476b
 
 ### Add Visual Studio tools
 $idePath = Get-VSIdePath.ps1
@@ -134,12 +132,9 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
-<<<<<<< HEAD
 #	02/18/2017	Use Meld for diffs when Beyond Compare not found
-=======
 #	02/16/2017	Updated PoshGit path for changed commit number
 #	02/15/2017	Added touch fn
->>>>>>> 918e6dbe113fe1e11a8c65b08e8b8e29ab79476b
 #	01/03/2017	Cleanup; removed unused functions & config settings: Is-NetworkMappedDrive, Sublime,
 #				TFS PowerShell snapin, PowerShell Community Extensions, .NET SDK Tools
 #	08/26/2016	Added Chocolatey, GraphViz support
