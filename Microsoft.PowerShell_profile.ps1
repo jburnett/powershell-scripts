@@ -23,7 +23,6 @@ if (test-path $gitToolsRoot) {
 # Load posh-git example profile (defines global prompt function)
 Import-Module 'C:\tools\poshgit\dahlbyk-posh-git-a4faccd\src\posh-git.psd1'
 
-
 ### Add Visual Studio tools
 $idePath = Get-VSIdePath.ps1
 if ($idePath -and (test-path $idePath)) {
