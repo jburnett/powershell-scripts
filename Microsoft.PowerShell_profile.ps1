@@ -61,6 +61,9 @@ else {
 $vscodeBin = (Get-Item "Env:ProgramFiles(x86)").Value + "\Microsoft VS Code\bin"
 if (test-path $vscodeBin) {
     $env:path += ";$vscodeBin"
+	# Create alias for VS Code
+	# TODO: what is alias target on Linux?
+	Set-Alias vsc	code.cmd
 }
 else {
     "NOTE: VS Code was not found"
