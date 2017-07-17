@@ -21,10 +21,7 @@ if (test-path $gitToolsRoot) {
 
 ### Load posh-git profile.
 # Load posh-git example profile (defines global prompt function)
-. 'C:\tools\poshgit\dahlbyk-posh-git-7d93c81\profile.example.ps1'
-
-Rename-Item Function:\Prompt PoshGitPrompt -Force
-function Prompt() {if(Test-Path Function:\PrePoshGitPrompt){++$global:poshScope; New-Item function:\script:Write-host -value "param([object] `$object, `$backgroundColor, `$foregroundColor, [switch] `$nonewline) " -Force | Out-Null;$private:p = PrePoshGitPrompt; if(--$global:poshScope -eq 0) {Remove-Item function:\Write-Host -Force}}PoshGitPrompt}
+Import-Module 'C:\tools\poshgit\dahlbyk-posh-git-a4faccd\src\posh-git.psd1'
 
 ### Add Visual Studio tools
 $idePath = Get-VSIdePath.ps1
@@ -63,6 +60,9 @@ else {
 $vscodeBin = (Get-Item "Env:ProgramFiles(x86)").Value + "\Microsoft VS Code\bin"
 if (test-path $vscodeBin) {
     $env:path += ";$vscodeBin"
+	# Create alias for VS Code
+	# TODO: what is alias target on Linux?
+	Set-Alias vsc	code.cmd
 }
 else {
     "NOTE: VS Code was not found"
@@ -132,6 +132,7 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	05/11/2017	Use Import-Module for PoshGit
 #	02/18/2017	Use Meld for diffs when Beyond Compare not found
 #	02/16/2017	Updated PoshGit path for changed commit number
 #	02/15/2017	Added touch fn
