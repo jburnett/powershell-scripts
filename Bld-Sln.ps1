@@ -31,3 +31,33 @@ if (0 -lt $slnFound.Count) {
 		}
 	}
 }
+
+#------------------------------[Comment-based Help]------------------------------
+
+<#
+.SYNOPSIS
+	Builds Visual Studio solution(s) using MSBuild
+
+
+.PARAMETER Recurse
+    Build all solutions in current and child directories
+
+.PARAMETER Clean
+	Cleans each solution rather than build
+
+.OUTPUTS
+
+
+.NOTES
+  Version:        1.0
+  Author:         J Burnett
+  Creation Date:  5/20/2014
+  Purpose/Change: Initial script development
+  
+.EXAMPLE
+  Bld-Sln -Recurse
+
+.EXAMPLE
+  Bld-Sln -Recurse
+
+#>
