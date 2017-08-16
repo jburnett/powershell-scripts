@@ -130,7 +130,7 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
-#	08/16/2017	Use 64-bit VSCode; detect without using specific path
+#	08/16/2017	Use 64-bit VSCode; detect git installed without using specific path
 #	05/11/2017	Use Import-Module for PoshGit
 #	02/18/2017	Use Meld for diffs when Beyond Compare not found
 #	02/16/2017	Updated PoshGit path for changed commit number
