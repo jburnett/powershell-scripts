@@ -13,9 +13,7 @@ if (test-path $userScriptPath) {
     $env:path += ";$userScriptPath"
 }
 ### Add Git tools to path. NOTE: git\cmd should already be in path
-$gitToolsRoot = (Get-Item "Env:ProgramFiles(x86)").Value + "\Git"
-if (test-path $gitToolsRoot) {
-    $env:path += ";$gitToolsRoot\bin"
+if (Get-Command git.exe) {
     . Add-GitHelpers.ps1
 }
 
@@ -57,7 +55,7 @@ else {
 
 ### Add VS Code editor
 # NOTE: important to use bin dir to pick up code.cmd
-$vscodeBin = (Get-Item "Env:ProgramFiles(x86)").Value + "\Microsoft VS Code\bin"
+$vscodeBin = (Get-Item "Env:ProgramFiles").Value + "\Microsoft VS Code\bin"
 if (test-path $vscodeBin) {
     $env:path += ";$vscodeBin"
 	# Create alias for VS Code
@@ -132,6 +130,7 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	08/16/2017	Use 64-bit VSCode; detect without using specific path
 #	05/11/2017	Use Import-Module for PoshGit
 #	02/18/2017	Use Meld for diffs when Beyond Compare not found
 #	02/16/2017	Updated PoshGit path for changed commit number
