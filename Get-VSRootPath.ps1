@@ -1,7 +1,8 @@
 $vsRootPath = ''
+#requires -version 3
 
 $vsCmnToolsPath = Get-VSCommonToolsPath.ps1
-if (test-path $vsCmnToolsPath) {
-		$vsRootPath = $vsCmnToolsPath.Parent.Parent
-}
+
+$vsRootPath = (get-item $vsCmnToolsPath).Parent.Parent.FullName
+
 return $vsRootPath
