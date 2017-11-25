@@ -75,6 +75,12 @@ else {
     "NOTE: GraphViz was not found"
 }
 
+### Use local/bin if it exists
+$localBin = "$env:APPDATA/local/bin"
+if (Test-Path $localBin) {
+	$env:path += ";$localBin"
+}
+
 
 ### .NET Framework (for MSBuild, etc)
 # Look for 64-bit first
@@ -130,6 +136,7 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	11/25/2017	Add $env:APPDATA/local/bin to path if it exists
 #	08/16/2017	Use 64-bit VSCode; detect git installed without using specific path
 #	05/11/2017	Use Import-Module for PoshGit
 #	02/18/2017	Use Meld for diffs when Beyond Compare not found
