@@ -1,15 +1,19 @@
+#requires -version 3
+
 $vsRootPath = ''
 
 $vsCmnToolsPath = Get-VSCommonToolsPath.ps1
-if ($vsCmnToolsPath -and (test-path $vsCmnToolsPath)) {
-		$vsRootPath = gci IDE -path ($vsCmnToolsPath.Parent.FullName)
-}
-elseif (Test-Path "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" ) {
-	$vsRootPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -property installationPath
-	$vsRootPath += "/Common7/IDE"
-}
 
-return $vsRootPath
+if ($vsCmnToolsPath -and (test-path $vsCmnToolsPath)) {
+		$vsRootPath = gci IDE -path ($vsCmnToolsPath.Parent.FullName) -Recurse -Directory
+}
+# elseif (Test-Path "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" ) {
+# 	$vsRootPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -property installationPath
+# 	$vsRootPath += "/Common7/IDE"
+# 	$vsRootPath = get-item -Path $vsRootPath
+# }
+
+return ($vsRootPath.FullName)
 
 
 #----------------------------------------------------------------------------------------------------
