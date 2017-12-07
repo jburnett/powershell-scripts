@@ -84,27 +84,27 @@ if (Test-Path $localBin) {
 
 ### .NET Framework (for MSBuild, etc)
 # Look for 64-bit first
-$fxRoot = "${Env:SYSTEMROOT}\Microsoft.NET\Framework64\"
-if ($false -eq (test-path $fxRoot -ErrorAction SilentlyContinue)) {
-	$fxRoot = "${Env:SYSTEMROOT}\Microsoft.NET\Framework\"
-	if ($false -eq (test-path $fxRoot -ErrorAction SilentlyContinue)) {
-		$fxRoot = ""
-	}
-}
-### Find most recent version of .NET Fx
-$newestFxPath = ""
-gci $fxRoot v?.* | ?{ $_.PSIsContainer } | %{
-	if ($newestFxPath -lt $_.FullName) {
-		$newestFxPath = $_.FullName
-	}
-}
-if (0 -lt $newestFxPath.Length) {
-	[string]::format('Found .NET Fx; Adding [{0}] to path...', $newestFxPath)
-	$env:path += [string]::format(';{0}', $newestFxPath)
-}
-else {
-	Write-Warning ".NET Framework was not found"
-}
+# $fxRoot = "${Env:SYSTEMROOT}\Microsoft.NET\Framework64\"
+# if ($false -eq (test-path $fxRoot -ErrorAction SilentlyContinue)) {
+# 	$fxRoot = "${Env:SYSTEMROOT}\Microsoft.NET\Framework\"
+# 	if ($false -eq (test-path $fxRoot -ErrorAction SilentlyContinue)) {
+# 		$fxRoot = ""
+# 	}
+# }
+# ### Find most recent version of .NET Fx
+# $newestFxPath = ""
+# gci $fxRoot v?.* | ?{ $_.PSIsContainer } | %{
+# 	if ($newestFxPath -lt $_.FullName) {
+# 		$newestFxPath = $_.FullName
+# 	}
+# }
+# if (0 -lt $newestFxPath.Length) {
+# 	[string]::format('Found .NET Fx; Adding [{0}] to path...', $newestFxPath)
+# 	$env:path += [string]::format(';{0}', $newestFxPath)
+# }
+# else {
+# 	Write-Warning ".NET Framework was not found"
+# }
 
 
 ### Chocolatey profile
@@ -136,6 +136,7 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	12/07/2017	Skip custom .NET detection and add to path
 #	11/25/2017	Add $env:APPDATA/local/bin to path if it exists
 #	08/16/2017	Use 64-bit VSCode; detect git installed without using specific path
 #	05/11/2017	Use Import-Module for PoshGit
