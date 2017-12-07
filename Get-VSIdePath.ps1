@@ -1,11 +1,17 @@
 #requires -version 3
 
+[CmdletBinding()] Param( ) # enables verbose
+
+
 $vsRootPath = ''
 
 $vsCmnToolsPath = Get-VSCommonToolsPath.ps1
+Write-Verbose "received CmnToolsPath = $vsCmnToolsPath"
 
 if ($vsCmnToolsPath -and (test-path $vsCmnToolsPath)) {
-		$vsRootPath = gci IDE -path ($vsCmnToolsPath.Parent.FullName) -Recurse -Directory
+	$searchBeginPath = $vsCmnToolsPath.Parent.FullName
+	write-verbose "gci for IDE under $searchBeginPath"
+	$vsRootPath = gci IDE -path $searchBeginPath -Directory
 }
 # elseif (Test-Path "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" ) {
 # 	$vsRootPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -property installationPath
@@ -13,7 +19,10 @@ if ($vsCmnToolsPath -and (test-path $vsCmnToolsPath)) {
 # 	$vsRootPath = get-item -Path $vsRootPath
 # }
 
-return ($vsRootPath.FullName)
+Write-Verbose "VS root path is $vsRootPath"
+$vsIDEPath = $vsRootPath.FullName
+Write-Verbose "Get-VSIDEPath returning $vsIDEPath"
+return $vsIDEPath
 
 
 #----------------------------------------------------------------------------------------------------
