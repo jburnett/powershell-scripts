@@ -1,9 +1,12 @@
+#Requires -RunAsAdministrator
+#Requires -Version 3
+
 ### Disables SMB version 1
 # J Burnett, 2018/02/07
 #####
 
 	
-if ( (Get-WindowsFeature FS-SMB1).Installed ) {
+if ( (Get-WindowsOptionalFeature -FeatureName "SMB1Protocol" -Online).State -eq 'Enabled' ) {
     Write-Host "SMB version 1 is installed on $Env:COMPUTERNAME. Disabling requires rebooting Windows. Continue (y/N)?"  -ForegroundColor Yellow
     
     $userSelection = Read-Host
