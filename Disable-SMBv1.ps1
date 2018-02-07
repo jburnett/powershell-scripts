@@ -3,7 +3,7 @@
 #####
 
 	
-if (-not (Get-WindowsFeature FS-SMB1).Installed) {
+if ( (Get-WindowsFeature FS-SMB1).Installed ) {
     Write-Host "SMB version 1 is installed on $Env:COMPUTERNAME. Disabling requires rebooting Windows. Continue (y/N)?"  -ForegroundColor Yellow
     
     $userSelection = Read-Host
@@ -16,5 +16,7 @@ if (-not (Get-WindowsFeature FS-SMB1).Installed) {
             Write-Host "SMBv1 will be unchanged."
         }
     }
-
+}
+else {
+    Write-Host "SMB version 1 is disabled on $Env:COMPUTERNAME."
 }
