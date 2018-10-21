@@ -19,7 +19,7 @@ if (Get-Command git.exe) {
 
 ### Load posh-git profile.
 # Load posh-git example profile (defines global prompt function)
-Import-Module 'C:\tools\poshgit\dahlbyk-posh-git-a4faccd\src\posh-git.psd1'
+Import-Module 'C:\tools\poshgit\dahlbyk-posh-git-9bda399\src\posh-git.psd1'
 
 ### Add Visual Studio tools
 $idePath = Get-VSIdePath.ps1
