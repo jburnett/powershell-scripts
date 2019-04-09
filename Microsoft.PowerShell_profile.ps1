@@ -54,6 +54,21 @@ else {
     "NOTE: VS Code was not found"
 }
 
+
+### Golang settings
+if (test-path "c:\go\bin\go.exe") {
+
+	$customGoPath = (Get-Item "c:\src\go")
+	if (test-path $customGoPath) {
+		$env:GOPATH = "$customGoPath"
+	}
+	"GOPATH is $Env:GOPATH"
+}
+else {
+    Write-Warning "GO was not found"
+}
+
+
 ### Add GraphViz if it's installed
 $graphViz = (Get-Item "Env:ProgramFiles(x86)").Value + "\GraphViz2.38"
 if (test-path $graphViz) {
@@ -124,6 +139,7 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	04/09/2019	Added Golang support; replace Beyond Compare with Meld
 #	12/07/2017	Skip custom .NET detection and add to path
 #	11/25/2017	Add $env:APPDATA/local/bin to path if it exists
 #	08/16/2017	Use 64-bit VSCode; detect git installed without using specific path
