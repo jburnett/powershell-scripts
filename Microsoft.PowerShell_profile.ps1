@@ -30,27 +30,15 @@ else {
 	Write-Warning "Visual Studio was not found"
 }
 
-### Add Beyond Compare tools
-$bc3ToolsRoot = (Get-Item "Env:ProgramFiles(x86)").Value + "\Beyond Compare 3"
-if (test-path $bc3ToolsRoot) {
-    $env:path += ";$bc3ToolsRoot"
-    # Reset diff alias to use BC3
-	Set-Alias diff 'C:\Program Files (x86)\Beyond Compare 3\BComp.exe' -Force -Option AllScope
+### Add Meld comparison tool
+$meldToolsRoot = (Get-Item "Env:ProgramFiles(x86)").Value + "\Meld"
+if (test-path $meldToolsRoot) {
+	$env:path += ";$meldToolsRoot"
+	# Reset diff alias to use Meld
+	Set-Alias diff 'C:\Program Files (x86)\Meld\meld.exe' -Force -Option AllScope
 }
 else {
-	"NOTE: Beyond Compare 3 was not found"
-
-	#TODO: consider replacing Beyond Compare with Meld
-
-	$meldToolsRoot = (Get-Item "Env:ProgramFiles(x86)").Value + "\Meld"
-	if (test-path $meldToolsRoot) {
-		$env:path += ";$meldToolsRoot"
-		# Reset diff alias to use Meld
-		Set-Alias diff 'C:\Program Files (x86)\Meld\meld.exe' -Force -Option AllScope
-	}
-	else {
-		"NOTE: Meld was not found"
-	}
+	"NOTE: Meld was not found"
 }
 
 ### Add VS Code editor
