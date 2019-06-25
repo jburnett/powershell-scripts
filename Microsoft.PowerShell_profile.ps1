@@ -7,6 +7,9 @@
 #	See end of file for history
 #----------------------------------------------------------------------------------------------------
 
+### Make sure HOME is local drive (not ASI's N:)
+$env:HOME=$env:USERPROFILE
+
 ### Add USER's scripts dir to path
 $userScriptPath = "$env:USERPROFILE\Documents\WindowsPowerShell"
 if (test-path $userScriptPath) {
@@ -130,7 +133,7 @@ if ($null -eq (get-alias pp -ErrorAction SilentlyContinue) ) {
 	set-alias pp		popd
 }
 # Define shortcut for listing dirs only
-function Get-ChildContainers { gci | ?{$_.PSIsContainer} }		#NOTE: ls -ad works, too
+function Get-ChildContainers { Get-ChildItem | ?{$_.PSIsContainer} }		#NOTE: ls -ad works, too
 if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 	set-alias ld		Get-ChildContainers		# list dirs
 }
@@ -139,6 +142,7 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	06/25/2019	Force HOME to USERPROFILE for git performance
 #	04/09/2019	Added Golang support; replace Beyond Compare with Meld
 #	12/07/2017	Skip custom .NET detection and add to path
 #	11/25/2017	Add $env:APPDATA/local/bin to path if it exists
