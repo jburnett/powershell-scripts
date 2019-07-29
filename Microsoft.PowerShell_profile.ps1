@@ -20,6 +20,10 @@ if (Get-Command git.exe) {
     . Add-GitHelpers.ps1
 }
 
+if (Get-Command docker.exe) {
+	. Add-DockerHelpers.ps1
+}
+
 ### Load posh-git profile.
 # Load posh-git example profile (defines global prompt function)
 Import-Module 'C:\tools\poshgit\dahlbyk-posh-git-9bda399\src\posh-git.psd1'
@@ -142,6 +146,7 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	07/22/2019	Use Add-DockerHelpers
 #	06/25/2019	Force HOME to USERPROFILE for git performance
 #	04/09/2019	Added Golang support; replace Beyond Compare with Meld
 #	12/07/2017	Skip custom .NET detection and add to path
