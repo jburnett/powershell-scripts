@@ -8,20 +8,26 @@
 #----------------------------------------------------------------------------------------------------
 
 ### Make sure HOME is local drive (not ASI's N:)
-$env:HOME=$env:USERPROFILE
+#TODO: $env:HOME=$env:USERPROFILE
+
+### Switch to user dir
+Set-Location -Path $env:USERPROFILE
 
 ### Add USER's scripts dir to path
-$userScriptPath = "$env:USERPROFILE\Documents\WindowsPowerShell"
+# TODO: set path based on Posh version
+$userScriptPath = "$env:USERPROFILE\Documents\PowerShell"
 if (test-path $userScriptPath) {
     $env:path += ";$userScriptPath"
 }
 ### Add Git tools to path. NOTE: git\cmd should already be in path
 if (Get-Command git.exe) {
-    . Add-GitHelpers.ps1
+	$helpers = Join-Path -Path $userScriptPath -ChildPath ".\Add-GitHelpers.ps1"
+	. $helpers
 }
 
 if (Get-Command docker.exe) {
-	. Add-DockerHelpers.ps1
+	$helpers = Join-Path -Path $userScriptPath -ChildPath ".\Add-DockerHelpers.ps1"
+	. $helpers
 }
 
 ### Load posh-git profile.
@@ -63,7 +69,7 @@ else {
 
 
 ### Golang settings
-if (test-path "c:\go\bin\go.exe") {
+if (test-path "c:\Program Files\Go\bin\go.exe") {
 
 	$customGoPath = (Get-Item "c:\src\go")
 	if (test-path $customGoPath) {
@@ -140,6 +146,9 @@ if ($null -eq (get-alias pp -ErrorAction SilentlyContinue) ) {
 function Get-ChildContainers { Get-ChildItem | ?{$_.PSIsContainer} }		#NOTE: ls -ad works, too
 if ($null -eq (get-alias ld -ErrorAction SilentlyContinue) ) {
 	set-alias ld		Get-ChildContainers		# list dirs
+}
+if ($null -eq (get-alias ll -ErrorAction SilentlyContinue) ) {
+    set-alias ll       Get-ChildItem
 }
 
 function touch {set-content -Path ($args[0]) -Value ($null)} 
