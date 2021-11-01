@@ -31,8 +31,7 @@ if (Get-Command docker.exe) {
 }
 
 ### Load posh-git profile.
-# Load posh-git example profile (defines global prompt function)
-Import-Module 'C:\tools\poshgit\dahlbyk-posh-git-9bda399\src\posh-git.psd1'
+Import-Module posh-git
 
 ### Add Visual Studio tools
 $idePath = Get-VSIdePath.ps1
@@ -54,36 +53,15 @@ else {
 	"NOTE: Meld was not found"
 }
 
-### Add VS Code editor
-# NOTE: important to use bin dir to pick up code.cmd
-$vscodeBin = (Get-Item "Env:ProgramFiles").Value + "\Microsoft VS Code\bin"
-if (test-path $vscodeBin) {
-    $env:path += ";$vscodeBin"
-	# Create alias for VS Code
-	# TODO: what is alias target on Linux?
-	Set-Alias vsc	code.cmd
-}
-else {
-    "NOTE: VS Code was not found"
-}
-
 
 ### Golang settings
-if (test-path "c:\Program Files\Go\bin\go.exe") {
-
-	$customGoPath = (Get-Item "c:\src\go")
-	if (test-path $customGoPath) {
-		$env:GOPATH = "$customGoPath"
-	}
-	"GOPATH is $Env:GOPATH"
-}
-else {
+if (-not (test-path "c:\Program Files\Go\bin\go.exe")) {
     Write-Warning "GO was not found"
 }
 
 
 ### Add GraphViz if it's installed
-$graphViz = (Get-Item "Env:ProgramFiles(x86)").Value + "\GraphViz2.38"
+$graphViz = (Get-Item "Env:ProgramFiles").Value + "\GraphViz"
 if (test-path $graphViz) {
     $env:path += ";$graphViz\bin"
 }
@@ -97,30 +75,6 @@ if (Test-Path $localBin) {
 	$env:path += ";$localBin"
 }
 
-
-### .NET Framework (for MSBuild, etc)
-# Look for 64-bit first
-# $fxRoot = "${Env:SYSTEMROOT}\Microsoft.NET\Framework64\"
-# if ($false -eq (test-path $fxRoot -ErrorAction SilentlyContinue)) {
-# 	$fxRoot = "${Env:SYSTEMROOT}\Microsoft.NET\Framework\"
-# 	if ($false -eq (test-path $fxRoot -ErrorAction SilentlyContinue)) {
-# 		$fxRoot = ""
-# 	}
-# }
-# ### Find most recent version of .NET Fx
-# $newestFxPath = ""
-# gci $fxRoot v?.* | ?{ $_.PSIsContainer } | %{
-# 	if ($newestFxPath -lt $_.FullName) {
-# 		$newestFxPath = $_.FullName
-# 	}
-# }
-# if (0 -lt $newestFxPath.Length) {
-# 	[string]::format('Found .NET Fx; Adding [{0}] to path...', $newestFxPath)
-# 	$env:path += [string]::format(';{0}', $newestFxPath)
-# }
-# else {
-# 	Write-Warning ".NET Framework was not found"
-# }
 
 
 ### Chocolatey profile
@@ -155,6 +109,7 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#   10/31/2021  Dropped several areas: VS Code, dotnet; simplified GO, posh-git
 #	07/22/2019	Use Add-DockerHelpers
 #	06/25/2019	Force HOME to USERPROFILE for git performance
 #	04/09/2019	Added Golang support; replace Beyond Compare with Meld
