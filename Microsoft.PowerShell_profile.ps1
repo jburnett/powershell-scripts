@@ -20,18 +20,22 @@ if (test-path $userScriptPath) {
     $env:path += ";$userScriptPath"
 }
 ### Add Git tools to path. NOTE: git\cmd should already be in path
-if (Get-Command git.exe) {
+if (Get-Command git.exe -ErrorAction SilentlyContinue) {
 	$helpers = Join-Path -Path $userScriptPath -ChildPath ".\Add-GitHelpers.ps1"
 	. $helpers
 }
 
-if (Get-Command docker.exe) {
+if (Get-Command docker.exe -ErrorAction SilentlyContinue) {
 	$helpers = Join-Path -Path $userScriptPath -ChildPath ".\Add-DockerHelpers.ps1"
 	. $helpers
 }
 
 ### Load posh-git profile.
 Import-Module posh-git
+### Use oh-my-posh & tell it to use posh-git$
+oh-my-posh.exe --init --shell pwsh --config ~/jburnett.omp.json | Invoke-Expression
+$env:POSH_GIT_ENABLED = $true
+
 
 ### Add Visual Studio tools
 $idePath = Get-VSIdePath.ps1
@@ -109,6 +113,7 @@ function touch {set-content -Path ($args[0]) -Value ($null)}
 
 #----------------------------------------------------------------------------------------------------
 # J's PowerShell profile handler
+#	12/11/2021	Added oh-my-posh
 #   10/31/2021  Dropped several areas: VS Code, dotnet; simplified GO, posh-git
 #	07/22/2019	Use Add-DockerHelpers
 #	06/25/2019	Force HOME to USERPROFILE for git performance
