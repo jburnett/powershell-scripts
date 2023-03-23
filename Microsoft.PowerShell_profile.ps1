@@ -63,6 +63,13 @@ if (-not (test-path "c:\Program Files\Go\bin\go.exe")) {
     Write-Warning "GO was not found"
 }
 
+### Add GMake if installed
+if (-not (Get-Command make.exe -ErrorAction SilentlyContinue)) {
+	if (test-path "C:\Program Files (x86)\GnuWin32\bin") {
+		$env:path += ";C:\Program Files (x86)\GnuWin32\bin"
+	}
+}
+
 
 ### Add GraphViz if it's installed
 $graphViz = (Get-Item "Env:ProgramFiles").Value + "\GraphViz"
